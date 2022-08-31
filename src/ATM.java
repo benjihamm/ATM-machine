@@ -73,7 +73,9 @@ public class ATM {
 	}
 	
 	public boolean withdrawMoney (int accountNum, double withdrawAmount) {
-		if (account.get(accountNum) == (depositAmount - withdrawAmount)) {
+		double amount = account.get(accountNum) - withdrawAmount;
+		account.put(accountNum, amount);
+		if(account.get(accountNum) == amount){
 			return true;
 		}
 		return false;
