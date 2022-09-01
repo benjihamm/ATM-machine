@@ -1,8 +1,11 @@
 import java.util.*;
+//import java.math.RoundingMode;
+//import java.text.DecimalFormat;
 
 public class ATM {
 	
-	private HashMap <Integer, Double> account = new <Integer, Double>HashMap(); 
+	private HashMap <Integer, Double> account = new HashMap<Integer, Double>(); 
+	//private static final DecimalFormat df = new DecimalFormat("0.00");
 	
 	public static void main(String[] args) {
 		ATM chase = new ATM();
@@ -41,6 +44,13 @@ public class ATM {
 		// Test other issues
 		chase.withdrawMoney(00002, 2020.2);
 		System.out.println(chase.checkBalance(00002)); // Should be 634.1 and not a fraction more!
+
+		chase.closeAccount(00002); //testing closeAccount
+		//System.out.println(chase.checkBalance(00002));
+		System.out.println(chase.depositMoney(00002, 200));
+		//System.out.println(chase.withdrawMoney(00002, 100));
+		//chase.withdrawMoney(00002, 200);
+		//System.out.println(chase.checkBalance(00002));
 	}
 
 	
@@ -53,29 +63,30 @@ public class ATM {
 	}
 	
 	public void closeAccount(int accountNum) {
-		if(account.get(accountNum) == 0.0) {
+		if(account.containsKey(accountNum)){
 			account.remove(accountNum);
 		}
 	}
 	
 	public double checkBalance(int accountNum) {
-		double balance  = 0.0;
-		balance = account.get(accountNum);
-		return balance;
+		if (account.containsKey(accountNum)){
+			//return df.format(account.get(accountNum));
+			return account.get(accountNum);
+		}
+		return 0.0;
 	}
 	
 	public boolean depositMoney(int accountNum, double depositAmount) {
-		account.put(accountNum, depositAmount);
-		if (account.get(accountNum) == depositAmount) {
+		if(account.containsKey(accountNum) && depositAmount>=0){
+			account.put(accountNum, account.get(accountNum) + depositAmount);
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean withdrawMoney (int accountNum, double withdrawAmount) {
-		double amount = account.get(accountNum) - withdrawAmount;
-		account.put(accountNum, amount);
-		if(account.get(accountNum) == amount){
+		if(account.containsKey(accountNum) && account.get(accountNum)>= withdrawAmount && withdrawAmount >= 0){
+			account.put(accountNum, account.get(accountNum)- withdrawAmount);
 			return true;
 		}
 		return false;
