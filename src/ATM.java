@@ -1,12 +1,11 @@
 import java.util.*;
-//import java.math.RoundingMode;
-//import java.text.DecimalFormat;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class ATM {
 	
 	private HashMap <Integer, Double> account = new HashMap<Integer, Double>(); 
-	//private static final DecimalFormat df = new DecimalFormat("0.00");
-	
+
 	public static void main(String[] args) {
 		ATM chase = new ATM();
 		// Open accounts
@@ -45,12 +44,13 @@ public class ATM {
 		chase.withdrawMoney(00002, 2020.2);
 		System.out.println(chase.checkBalance(00002)); // Should be 634.1 and not a fraction more!
 
-		chase.closeAccount(00002); //testing closeAccount
-		//System.out.println(chase.checkBalance(00002));
+		chase.closeAccount(00002);
+		System.out.println(chase.checkBalance(00002));
 		System.out.println(chase.depositMoney(00002, 200));
-		//System.out.println(chase.withdrawMoney(00002, 100));
-		//chase.withdrawMoney(00002, 200);
-		//System.out.println(chase.checkBalance(00002));
+		System.out.println(chase.withdrawMoney(00002, 100));
+		chase.withdrawMoney(00002, 200);
+		System.out.println(chase.checkBalance(00002));
+		System.out.println(chase.depositMoney(00002, -100));
 	}
 
 	
@@ -70,8 +70,8 @@ public class ATM {
 	
 	public double checkBalance(int accountNum) {
 		if (account.containsKey(accountNum)){
-			//return df.format(account.get(accountNum));
-			return account.get(accountNum);
+			BigDecimal balance = new BigDecimal(account.get(accountNum)).setScale(2, RoundingMode.HALF_UP);
+			return balance.doubleValue();
 		}
 		return 0.0;
 	}
@@ -83,7 +83,7 @@ public class ATM {
 		}
 		return false;
 	}
-	
+
 	public boolean withdrawMoney (int accountNum, double withdrawAmount) {
 		if(account.containsKey(accountNum) && account.get(accountNum)>= withdrawAmount && withdrawAmount >= 0){
 			account.put(accountNum, account.get(accountNum)- withdrawAmount);
